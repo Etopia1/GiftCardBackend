@@ -1,5 +1,5 @@
 
-exports.paymentReceiptTemplate = ({
+exports.paymentReceiptTemplate = (
   Name,
   Currency,
   Redemptioncode,
@@ -8,7 +8,7 @@ exports.paymentReceiptTemplate = ({
   userEmail,
   GiftCardCvv,
   ExpireDate,
-}) => {
+) => {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>

