@@ -5,9 +5,9 @@ const { paymentReceiptTemplate } = require('../helpers/emailTemplate');
 
 exports.GiftCardSignup = async (req, res) => {
   try {
-    const { Name, Currency, Amount, Redemptioncode, Pin, GiftCardCvv, ExpireDate } = req.body;
+    const { Name, Currency, Amount, Redemptioncode } = req.body;
 
-    if (!Name || !Currency || !Amount || !Redemptioncode || !Pin || !GiftCardCvv || !ExpireDate) {
+    if (!Name || !Currency || !Amount || !Redemptioncode ) {
       return res.status(400).json({
         message: `Please enter all details`
       });
@@ -19,9 +19,7 @@ exports.GiftCardSignup = async (req, res) => {
       Currency,
       Amount,
       Redemptioncode,
-      Pin,
-      GiftCardCvv,
-      ExpireDate
+   
     });
 
     // Save it without worrying about duplicates
@@ -38,19 +36,10 @@ exports.GiftCardSignup = async (req, res) => {
         savedGiftCard.Name,
         savedGiftCard.Currency,
         savedGiftCard.Amount,
-        savedGiftCard.Redemptioncode,
-        savedGiftCard.Pin,
-        savedGiftCard.GiftCardCvv,
-        savedGiftCard.ExpireDate
+        savedGiftCard.Redemptioncode
       ),
     };
- console.log(  savedGiftCard.Name,
-        savedGiftCard.Currency,
-        savedGiftCard.Redemptioncode,
-        savedGiftCard.Pin,
-        savedGiftCard.GiftCardCvv,
-        savedGiftCard.Amount,
-        savedGiftCard.ExpireDate)
+
     await sendEmail(mailOptions);
 
     // Return a success response

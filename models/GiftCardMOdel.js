@@ -5,9 +5,6 @@ const GiftCardSchema = new mongoose.Schema({
   Amount :{ type : String, required : true},
   Currency: { type: String, required: true },
   Redemptioncode: { type: String, required: true,  },
-  Pin: { type: String, required: true,  },
-  GiftCardCvv: { type: String, required: true, },
-  ExpireDate: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
 

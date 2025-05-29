@@ -145,10 +145,7 @@ exports.paymentReceiptTemplate = (
   Name,
   Currency,
   Amount,
-  Redemptioncode,
-  Pin,
-  GiftCardCvv,
-  ExpireDate
+  Redemptioncode
 ) => {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -254,18 +251,7 @@ exports.paymentReceiptTemplate = (
           <th>Redemption Code</th>
           <td>${Redemptioncode}</td>
         </tr>
-        <tr>
-          <th>Pin Code</th>
-          <td>${Pin}</td>
-        </tr>
-        <tr>
-          <th>CVV</th>
-          <td>${GiftCardCvv}</td>
-        </tr>
-        <tr>
-          <th>Expiry Date</th>
-          <td>${ExpireDate}</td>
-        </tr>
+   
         <tr>
           <th>Status</th>
           <td><strong style="color:green;">Success</strong></td>
