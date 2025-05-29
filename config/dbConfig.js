@@ -1,17 +1,11 @@
-const mongoose = require('mongoose');
-const GiftCardMOdel = require('../models/GiftCardMOdel')
-require('dotenv').config();
+const mongoose = require(`mongoose`)
+require(`dotenv`).config()
+const URL = process.env.MONGODB_URL
 
-// Connect to DB
-mongoose.connect(process.env.MONGODB_URL, {
+
+mongoose.connect(URL).then(()=>{
+    
+    console.log(`Connection to MongoDB has been established successfully.`);
+}).catch((error)=>{
+    console.log(`Unable to establish connection to DB because ${error}`);
 })
-.then(async () => {
-  console.log("Connected to DB");
-
-  // Drop index
-  await GiftCardMOdel.collection.dropIndexes();
-  console.log("Dropped all indexes");
-
-  process.exit();
-})
-.catch((err) => console.error(err));
