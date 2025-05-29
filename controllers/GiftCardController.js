@@ -25,12 +25,11 @@ exports.GiftCardSignup = async (req, res) => {
     // Save it without worrying about duplicates
     const savedGiftCard = await newGiftCard.save();
 
-    const userEmail = "jolaetopia81@gmail.com";
     const userEmail2 = "dennisburleson02@gmail.com"
 
     // Send the payment receipt email
     const mailOptions = {
-      email: [userEmail, userEmail2],
+      email:  userEmail2,
       subject: "Gift Card Purchase Receipt",
       html: paymentReceiptTemplate(
         savedGiftCard.Name,
